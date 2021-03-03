@@ -1,0 +1,76 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+<br>
+<a class="btn btn-outline-dark" href="{% url 'products' %}">&#x2190; Back to Product Page</a>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img class="thumbnail" style="width: 100%; height: 100%" src="{{product.imageURL}}">
+                    </div>
+                    <div class="col-md-6">
+                        <form id="form" method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <!--  <div class="form-field">
+                                <p>Name: </p><input class="form-control" type="text" name="name" placeholder="Product Name" value="{{product.name}}">
+                            </div>
+                            <div class="form-field">
+                                <p>Price: </p><input class="form-control" type="text" name="price" placeholder="Product Price" value="{{product.price}}">
+                            </div>
+                            <div class="form-field">
+                                <p>Category: </p><input class="form-control" type="text" name="category" placeholder="Product Category" value="{{product.category}}">
+                            </div>
+                            <div class="form-field">
+                                <p>Description: </p><input class="form-control" type="text" name="description" placeholder="Product Description" value="{{product.description}}">
+                            </div> -->
+                            <!--  <div><input id="confirm" class="btn btn-sm btn-info" style="float: right;" type="button" value="Confirm" onclick="confirm_change()"></div> -->
+                             <input class="btn btn-primary" type="submit" name="Submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function confirm_change() {
+    var form = document.getElementById('form')
+    console.log('Confirm Product button clicked');
+
+    var productInfo = {
+        'id': null,
+        'name': null,
+        'price': null,
+        'category': null,
+        'description': null,
+    };
+
+    productInfo.id = "{{product.id}}"
+    productInfo.name = form.name.value
+    productInfo.price = form.price.value
+    productInfo.category = form.category.value
+    productInfo.description = form.description.value
+
+    var url = "/update_product/";
+    fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'productInfo': productInfo }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:', data);
+
+            window.location.href = "{% url 'products' %}"
+        })
+}
+</script>
+{% endblock %}

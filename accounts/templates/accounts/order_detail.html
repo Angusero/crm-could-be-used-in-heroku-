@@ -1,0 +1,30 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+
+<br>
+<div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-6">
+        <div class="card card-body">
+            <div class="column">
+                <h5>Order ID: {{order.id}}</h5>
+                <p>Transaction ID: {{order.transaction_id}} </p>
+                <p>Order Status: {{order.status}} </p>
+                <p>Placed Date: {{shipping.date_added}} </p>
+                <p>Order Note: {{order.note}} </p>
+                <br>
+                <h6>Ordered Products</h6>
+                
+                {% for item in items %}               
+                <p>Product: {{item.product}} </p>
+                <p>Quantity: {{item.quantity}} </p>
+                <p>Price: ${{item.get_total}} </p>
+                 <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

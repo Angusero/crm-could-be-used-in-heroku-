@@ -1,0 +1,268 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form id="form">
+                <div id="user-info">
+                    <hr>
+                    <div>
+                        <h5>Customer Information:</h5>
+                    </div>
+                    <div class="form-field">
+                        <p>Name:</p>
+                        <input required class="form-control" type="text" name="name" placeholder="Name.." value="{{customer.name}}">
+                    </div>
+                    <div class=" form-field ">
+                        <p>E-mail:</p><input required class="form-control" type="email" name="email" placeholder="Email.." value="{{customer.email}}">
+                    </div>
+                </div>
+                <div id="shipping-info-num">
+                    <hr>
+                    <div>
+                        <h5>Shipping Information:</h5>
+                    </div>
+                    <div class="form-field">
+                        {% if customer.phone == None %}
+                        <p>Tel No:</p> <input class="form-control" type="text" required name="phone" placeholder="Phone Number..." value="">
+                        {% else %}
+                        <p>Tel No:</p> <input class="form-control" type="text" required name="phone" placeholder="Phone Number..." value="{{customer.phone}}">
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="shipping-info">
+                    <br>
+                    <div>
+                        <p>The address last time you used:</p>
+                    </div>
+                    <div class="form-field">
+                        <p>Address:</p><input class="form-control" type="text" required name="address" placeholder="Address..." value="{{address.address}}">
+                    </div>
+                    <div class="form-field">
+                        <p>City</p><input class="form-control" type="text" required name="city" placeholder="City..." value="{{address.city}}">
+                    </div>
+                    <div class="form-field">
+                        <p>State:</p><input class="form-control" type="text" required name="state" placeholder="State..." value="{{address.state}}">
+                    </div>
+                    <div class="form-field">
+                        <p>Zipcode:</p><input class="form-control" type="text" required name="zipcode" placeholder="Zipcode..." value="{{address.zipcode}}">
+                    </div>
+                    <div class="form-field">
+                        <p>Country:</p><input class="form-control" type="text" required name="country" placeholder="Country..." value="{{address.country}}">
+                    </div>
+                </div>
+                <hr>
+                <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+            </form>
+        </div>
+        <br>
+        <div class="box-element">
+            <form id="points-form">
+                <div id="points-info">
+                    <hr>
+                    <h5>Points Information</h5>
+                    <div>
+                        <p>Points you keep: <strong>{{customer.points}}</strong> p</p>
+                        <p id="points_to_expire">Points about to expire: <strong>coming soon</strong></p>
+                        <p id="points_to_use"></p>
+                    </div>
+                    <div>
+                        <div><input id="confirm_points" class="btn btn-sm btn-info" type="button" value="Click to input the points you want to use" onclick="calculate_points()"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div class="box-element hidden" id="payment-info">
+            <div class="col">
+                <small>PayPal Options</small>
+                <div id="paypal-button-container">
+                </div>
+                <br>
+                <small> Ali Pay Options</small>
+                <div id="alipay-button-container">
+                    <p><strong>coming soon</strong></p>
+                </div>
+                <br>
+                <small>Wechat Pay Options</small>
+                <div id="wechatpay-button-container">
+                    <p><strong>coming soon</strong></p>
+                </div>
+                <!--                 <hr>
+                <button id="make-payment">Make payment</button>  -->
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="box-element">
+            <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+            <hr>
+            <h3>Order Summary</h3>
+            <hr>
+            {% for item in items %}
+            <div class="cart-row">
+                <div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
+                <div style="flex:2">
+                    <p>{{item.product.name}}</p>
+                </div>
+                <div style="flex:1">
+                    <p>${{item.product.price|floatformat:2}}</p>
+                </div>
+                <div style="flex:1">
+                    <p>x{{item.quantity}}</p>
+                </div>
+            </div>
+            {% endfor %}
+            <h5>Items: {{order.get_cart_items}}</h5>
+            <h5 id="use_points"></h5>
+            <h5 id="total_after_points">Total: ${{order.get_cart_total|floatformat:2}}</h5>
+        </div>
+    </div>
+</div>
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=AaI_xE36bUfYAHTY0Hmxa8pWjxem9wEvIV5IgMMXqoF0lohtZtk3dhH64eoVTWN-eb3rpJZ4c3zODIiG&currency=USD"></script>
+<script>
+// var total = '{{order.get_cart_total}}'
+var total = document.getElementById("total_after_points").innerHTML
+// Render the PayPal button into #paypal-button-container
+paypal.Buttons({
+
+    style: {
+        color: 'blue',
+        shape: 'rect',
+    },
+
+    // Set up the transaction
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: parseFloat(total).toFixed(2)
+                }
+            }]
+        });
+    },
+
+    // Finalize the transaction
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            // Show a success message to the buyer
+            // alert('Transaction completed by ' + details.payer.name.given_name + '!');
+            submitFormData()
+        });
+    }
+
+
+}).render('#paypal-button-container');
+</script>
+<script type="text/javascript">
+var shipping = '{{order.shipping}}'
+var total = parseFloat('{{order.get_cart_total}}')
+var points_in_hand = parseFloat('{{customer.points}}')
+var points_to_use = parseFloat("0.0")
+var new_added_points = parseFloat(total) / parseFloat(100)
+
+points_in_hand = points_in_hand + new_added_points
+
+if (shipping == 'False') {
+    document.getElementById('shipping-info').innerHTML = ''
+ 
+    //Show payment if logged in user wants to buy an item that does not require shipping
+    // document.getElementById('payment-info').classList.remove("hidden");
+    // document.getElementById('form-button').classList.add("hidden");
+}
+
+// show information of logged in user
+
+var form = document.getElementById('form')
+form.addEventListener('submit', function(e) {
+    e.preventDefault()
+    console.log('Form submitted...')
+    document.getElementById('form-button').classList.add("hidden");
+    document.getElementById('payment-info').classList.remove("hidden")
+
+})
+
+function calculate_points() {
+    points_to_use = prompt("Please enter the points you want to use:", "0");
+
+    if (points_to_use != null && points_to_use <= points_in_hand && points_to_use <= total && points_to_use != "0") {
+        document.getElementById("points_to_use").innerHTML =
+            "You will use " + parseFloat(points_to_use).toFixed(2) + " P";
+        document.getElementById("use_points").innerHTML =
+            "Using Points: " + parseFloat(points_to_use).toFixed(2) + " P";
+        var new_total = total - points_to_use;
+        document.getElementById("total_after_points").innerHTML = new_total.toFixed(2);
+
+        new_added_points = new_total / 100;
+
+
+
+    } else if (points_to_use === null || points_to_use === "0") {
+        return;
+    } else {
+        confirm("Wrong number! Please Try again!");
+    }
+
+
+}
+
+function submitFormData() {
+    console.log('Payment button clicked')
+
+    var userFormData = {
+        'name': null,
+        'email': null,
+        'total': parseFloat(total).toFixed(2),
+        'order_points': parseFloat(new_added_points).toFixed(2),
+    }
+
+    var shippingInfo = {
+        'address': null,
+        'city': null,
+        'state': null,
+        'zipcode': null,
+    }
+
+    var pointsInfo = {
+        'points_to_use': parseFloat(points_to_use).toFixed(2),
+        'new_added_points': parseFloat(new_added_points).toFixed(2),
+    }
+
+    if (shipping != 'False') {
+        shippingInfo.address = form.address.value
+        shippingInfo.city = form.city.value
+        shippingInfo.state = form.state.value
+        shippingInfo.zipcode = form.zipcode.value
+    }
+
+    console.log('shipping:', shipping)
+    console.log('user:', user)
+    console.log('Shipping Info:', shippingInfo)
+    console.log('User Info:', userFormData)
+
+
+    var url = "/process_order/"
+    fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo, 'pointsInfo': pointsInfo }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:', data);
+            // alert('Transaction completed');
+
+            // clear cart when the payment button is successfully submitted
+            cart = {}
+            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+            window.location.href = "{% url 'store' %}"
+        })
+}
+</script>
+{% endblock content %}　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　

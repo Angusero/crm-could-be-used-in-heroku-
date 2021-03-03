@@ -1,0 +1,125 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<br>
+<a class="btn btn-outline-dark" href="{% url 'products' %}">&#x2190; Back to Products</a>
+<br>
+<div class="container">
+    <div class="card card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Update Instock Quantity of Multiple Products</h3>
+            </div>
+        </div>
+        <div>
+            {% csrf_token %}
+            <!-- <div style="position: relative; overflow: auto; max-height: 1000px; width: 100%;"> -->
+            <table class="table table-smtable table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <col style="width:20%">
+                <col style="width:20%">
+                <col style="width:20%">
+                <col style="width:20%">
+                <col style="width:20%">
+                <thead>
+                    <tr>
+                        <th>Picture</th>
+                        <th>Product ID</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>New Arrival Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in products %}
+                    <tr>
+                        <td class="table-img">
+                            <div class="box">
+                                <div class="box-img">
+                                    <img src="/images/{{i.image}}" alt="" border=3 height=100 width=150>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="theID">{{i.id}}</td>
+                        <td>{{i.name}}</td>
+                        <td class="theQuantity">{{i.quantity}}</td>
+                        <td><input class="form-control theAOG" type="number" step="1" name="aog" placeholder="0" onkeypress="return onlyNumberKey(event)" maxlength="11"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- </div> -->
+            <div><input id="confirm" class="btn btn-sm btn-warning" style="float: right;" type="button" value="Confirm" onclick="newQuantity()"></div>
+        </div>
+    </div>
+</div>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+<script type="text/javascript">
+function onlyNumberKey(evt) {
+    // Only ASCII charactar in that range allowed 
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+        return false;
+    return true;
+}
+
+var mybutton = document.getElementById("myBtn");
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() { scrollFunction() };
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+    } else {
+        mybutton.style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+
+function newQuantity() {
+    var quantityArray = new Array();
+    var ids = document.getElementsByClassName('theID');
+    var quantities = document.getElementsByClassName('theQuantity');
+
+    var aogs = document.getElementsByClassName('theAOG');
+
+    for (var i = 0; i < ids.length; i++) {
+        var product_quantity = {
+            'id': null,
+            'quantity': null,
+        };
+        product_quantity.id = ids[i].innerHTML;
+        product_quantity.quantity = quantities[i].innerHTML;
+
+
+        if (aogs[i].value.split(" ").join("") != null && aogs[i].value.split(" ").join("") != "" && aogs[i].value != "0") {
+            product_quantity.quantity = parseInt(aogs[i].value) + parseInt(quantities[i].innerHTML);
+            quantityArray.push(product_quantity);
+        }
+
+    }
+
+    var url = "/update_aog_all/";
+    fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'quantityArray': quantityArray }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:', data);
+
+            window.location.href = "{% url 'aog_all' %}"
+        })
+
+}
+</script>
+{% endblock %}

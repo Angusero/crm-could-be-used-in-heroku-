@@ -1,0 +1,230 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+<style>
+    table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js">
+$(document).ready(function() {
+    $('#dtVerticalScrollProducts').DataTable({
+        "scrollY": "200px",
+        "scrollCollapse": true,
+    });
+    $('.dataTables_length').addClass('bs-select');
+});
+</script>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body">
+                <form method="get">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col col-md-4">
+                                <div class="col">Name contains:</div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="col">Price contains:</div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="col">Quantity:</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <div class="col">{{productFilter.form.name}}</div>
+                                </div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <div class="col">{{productFilter.form.price}}</div>
+                                </div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <div class="col">{{productFilter.form.quantity}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col col-md-4">
+                                <div class="col">Category contains:</div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="col">Description contains:</div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="col">Digital:</div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <!-- <div class="col ">Category contains:</div> -->
+                                    <div class="col">{{productFilter.form.name}}</div>
+                                </div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <!-- <div class="col">Description contains:</div> -->
+                                    <div class="col">{{productFilter.form.description}}</div>
+                                </div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <!-- <div class="col">Digital:</div> -->
+                                    <div class="col">{{productFilter.form.digital}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <div class="col"><a href="#" onclick="add_tag()">Tags:</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  align-items-end">
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                    <div class="col tags">{{productFilter.form.tags}}</div>
+                                </div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="row align-items-end">
+                                </div>
+                            </div>
+                            <div class="col col-md-4 align-self-end">
+                                <div class="row">
+                                    <div class="col ">
+                                        <button class="btn btn-outline-primary btn-sm" type="submit">Search</button>
+                                        <a class="btn btn-default" href="{% url 'products' %}">Clear</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+            </div>
+            <!--  <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Products</h3>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-sm btn-info" style="float: right;" href="{% url 'add_products' %}">Add Products</a>
+                    </div>
+                </div>
+            </div> -->
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Products</h3>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-sm btn-info" style="float: right;" href="{% url 'add_products' %}">Add Products</a>
+                    </div>
+                </div>
+                <div style="position: relative; overflow: auto; max-height: 1000px; width: 100%;">
+                    <table id="dtVerticalScrollProducts" class="table table-smtable table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                        <col style="width:23%">
+                        <col style="width:23%">
+                        <col style="width:23%">
+                        <col style="width:23%">
+                        <col style="width:4%">
+                        <col style="width:4%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Product</th>
+                                <th><a href="{% url 'aog_all' %}">Quantity</a></th>
+                                <th>Price</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in products %}
+                            <tr>
+                                <td class="table-img">
+                                    <div class="box">
+                                        <div class="box-img">
+                                            <img src="/images/{{i.image}}" alt="" border=3 height=100 width=150>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{i.name}}</td>
+                                <td>
+                                    {% if i.quantity > 0 %}
+                                    <p>{{i.quantity}}</p>
+                                    {% else %}
+                                    <p style="color: red"><strong>{{i.quantity}}</strong></p>
+                                    <a href="{% url 'product_aog' i.id %}" style="color: red"><strong>NO STOCK</strong></a>
+                                    {% endif %}
+                                </td>
+                                <td>{{i.price}}</td>
+                                <td><a class="btn btn-sm btn-danger" href="{% url 'delete_product' i.id %}">Delete</a></td>
+                                <td><a class="btn btn-sm btn-info" href="{% url 'edit_product' i.id %}">Edit</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p> Click <a href="{% url 'recover_product' %}">here</a> to check deleted products</p>
+</div>
+<script type="text/javascript">
+var allTags = document.getElementById('id_tags');
+
+var tags = [];
+
+function add_tag() {
+    newTag = prompt("Enter the new Tag name:", "");
+
+    for (var i = 0; i < allTags.length; i++) {
+        tags.push(allTags[i].text);
+    }
+
+    if (tags.indexOf(newTag) >= 0) {
+        confirm(newTag + " already exists, please Try again!");
+    } else {
+        console.log('Add new tag...');
+        var tag = {
+            'newTag': newTag,
+        }
+
+        var url = "/add_tag/"
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({'tag':tag}),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+
+                window.location.href = "{% url 'products' %}"
+            })
+    }
+}
+</script>
+{% endblock %}

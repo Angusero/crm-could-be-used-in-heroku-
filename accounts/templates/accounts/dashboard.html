@@ -1,0 +1,149 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+{% include 'accounts/status.html' %}
+<style>
+    table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+
+</style>
+<br>
+<div class="row">
+    <div class="col-md-5">
+        <h5>CUSTOMERS:</h5>
+        <div class="card card-body">
+            <form method="get">
+                <div class="container">
+                    <div class="row">
+                        <div class="col ">Name contains:</div>
+                        <div class="col">{{customerFilter.form.name}}</div>
+                        <div class="col col-md-5"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">Phone contains:</div>
+                        <div class="col">{{customerFilter.form.phone}}</div>
+                        <div class="col col-md-5"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">Email contains:</div>
+                        <div class="col">{{customerFilter.form.email}}</div>
+                        <div class="col col-md-5"></div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" type="submit">Search</button><a class="btn btn-default" href="{% url 'home' %}">Clear</a>
+            </form>
+        </div>
+        <div class="card card-body">
+            <div style="position: relative; overflow: auto; max-height: 300px; width: 100%;">
+                <table id="dtVerticalScrollCustomers" class="table table-smtable table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Customer</th>
+                            <th>Phone No</th>
+                            <th>E-mail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in customers %}
+                        <tr>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td>
+                            <td>{{customer.name}}</td>
+                            <td>{{customer.phone}}</td>
+                            <td>{{customer.email}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <h5>ORDERS</h5>
+        <div class="card card-body">
+            <form method="get">
+                <div class="container">
+                    <div class="row">
+                        <div class="col ">Status:</div>
+                        <div class="col">{{orderFilter.form.status}}</div>
+                        
+                        <div class="col ">Note contains:</div>
+                        <div class="col">{{orderFilter.form.note}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col ">Transaction id:</div>
+                        <div class="col">{{orderFilter.form.transaction_id}}</div>
+                        
+                        <div class="col ">Points:</div>
+                        <div class="col">{{orderFilter.form.points}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-5">Date created is greater than or equal to:</div>
+                        <div class="col">{{orderFilter.form.start_date}}</div>
+                        <div class="col col-md-3"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-5">Date created is less than or equal to:</div>
+                        <div class="col">{{orderFilter.form.end_date}}</div>
+                        <div class="col col-md-3"></div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" type="submit">Search</button>
+                <a class="btn btn-default" href="{% url 'home' %}">Clear</a>
+            </form>
+        </div>
+        <div class="card card-body">
+            <div style="position: relative; overflow: auto; max-height: 300px; width: 100%;">
+                <table id="dtVerticalScrollOrders" class="table table-smtable table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{order.customer.name}}</td>
+                            <!-- orders will use other attributes so for now just use the phone number -->
+                            <td>{{order.date_created}}</td>
+                            <td>{{order.status}}</td>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Update</a></td>
+                            <td><a class="btn btn-sm btn-danger" href="{% url 'delete_order' order.id %}">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js">
+$(document).ready(function() {
+    $('#dtVerticalScrollCustomers').DataTable({
+        "scrollY": "200px",
+        "scrollCollapse": true,
+    });
+    $('.dataTables_length').addClass('bs-select');
+});
+$(document).ready(function() {
+    $('#dtVerticalScrollOrders').DataTable({
+        "scrollY": "200px",
+        "scrollCollapse": true,
+    });
+    $('.dataTables_length').addClass('bs-select');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<br>
+<a class="btn btn-outline-dark" href="{% url 'products' %}">&#x2190; Back to Products</a>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img class="thumbnail" style="width: 100%; height: 100%" src="{{product.imageURL}}">
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            Name: {{product.name}}
+                        </div>
+                        <div>
+                            Price: {{product.price}}
+                        </div>
+                        <div>
+                            In Stock: {{product.quantity}}
+                        </div>
+                        <div>
+                            Descriptions: {{product.description}}
+                        </div>
+                        <br>
+                        <div>
+                            <form id="form">
+                                {% csrf_token %}
+                                <div>
+                                    <h6>New instore items are arriving, input the quantity:</h6>
+                                </div>
+                                <div class="form-field">
+                                    <input class="form-control theAOG" type="number" step="1" name="aog" placeholder="0" onkeypress="return onlyNumberKey(event)" maxlength="11">
+                                </div>
+                                <div>
+                                    <input id="confirm" class="btn btn-sm btn-warning" style="float: right;" type="button" value="Confirm" onclick="newInstock()">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function onlyNumberKey(evt) {
+    // Only ASCII charactar in that range allowed 
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+        return false;
+    return true;
+}
+
+var form = document.getElementById('form');
+
+function newInstock() {
+    var theID = '{{product.id}}';
+    var theProduct = '{{product.quantity}}';
+    var newInstock = {
+        'id': null,
+        'quantity': null,
+    };
+
+    if (form.aog.value.split(" ").join("") != null && form.aog.value.split(" ").join("") != "" && form.aog.value != "0") {
+        newInstock.id = theID;
+        newInstock.quantity = parseInt(form.aog.value) + parseInt(theProduct);
+    }
+
+    var url = "/update_product_aog/";
+    fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'newInstock': newInstock }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:', data);
+
+            window.location.href = "{% url 'products' %}"
+        })
+}
+</script>
+{% endblock %}

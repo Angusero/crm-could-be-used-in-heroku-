@@ -1,0 +1,103 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>Add Products</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-body">
+                <form accept="" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Product Name: *</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.name}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Product Price: *</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.price}}</p>
+                        </div>
+                    </div>
+                     <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Product Quantity: *</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.quantity}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Digital: *</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.digital}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Category:</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.category}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Description:</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.description}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Tag:</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.tags}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Image:</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p>{{form.image}}</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input class="btn btn-danger" type="submit" name="Submit">
+                        </div>
+                        <div class="col-md-3 col-md-offset-6" style="float: right;">
+                            <a class="btn btn-warning" href="{% url 'products' %}">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Update User Authenticate Comfirmation</h3>
+                        <form action="{% url 'update_user' targetUser.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>Choose the identity to transfrom <strong>{{targetCustomer.name}}</strong>'s old identity [<strong>{{targetUserGroup}}</strong>] into:</p>
+                                    {{form.groups}}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p><strong>Check the box below if the NEW identity is staff level:</strong></p>
+                                    Staff Status: {{form.is_staff}}
+                                </div>
+                            </div>
+                            <div style="float: right;">
+                                <a class="btn btn-warning" href="{% url 'customer' targetCustomer.id %}">Cancel</a>
+                                <input class="btn btn-danger" type="submit" name="Confirm">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

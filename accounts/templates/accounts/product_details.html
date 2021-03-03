@@ -1,0 +1,50 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<br>
+<a class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Back to Store</a>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img class="thumbnail" style="width: 100%; height: 100%" src="{{product.imageURL}}">
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            Name: {{product.name}}
+                        </div>
+                        <div>
+                            Price: {{product.price}}
+                        </div>
+                        <div>
+                            In Stock: {{product.quantity}}
+                        </div>
+                        <div>
+                            Category: {{product.category}}
+                        </div>
+                        <div>
+                            Descriptions: {{product.description}}
+                        </div>
+                        <div>
+                            Tags: {{product.tags}}
+                        </div>
+                        <div>
+                            Is this digital: {{product.digital}}
+                        </div>
+                        <div>
+                            Points: {{product.points}}
+                        </div>
+                        {% if product.quantity > 0 %}
+                        <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

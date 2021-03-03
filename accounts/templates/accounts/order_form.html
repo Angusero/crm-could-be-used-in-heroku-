@@ -1,0 +1,27 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container ">
+    <div class="row">
+        <div class="col-lg-3">
+            
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-body">
+                <h5>Customer Name: {{order.customer.name}}</h5>
+                <p>Transaction ID: {{order.transaction_id}}</p>
+                <form action="" method="POST">
+                    <!-- what's this? -->
+                    {% csrf_token %}
+                    <!-- for we are using a loop, we have to add this line to make sure the submit work well -->
+                    <!-- {{ formset.management_form }} -->
+                    <p>Status: {{form.status}}</p>
+                    <p>Note: {{form.note}}</p>
+                    <hr>
+                    <input type="submit" name="Submit">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

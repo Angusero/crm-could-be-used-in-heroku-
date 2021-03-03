@@ -1,0 +1,33 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-4">
+            <img class="thumbnail"  src="{{product.imageURL}}">
+            <div class="box-element product">
+                <h6 style="float: left;"><strong>{{product.name}}</strong></h6>
+               {% if product.quantity <= 0 %}
+                <h6 id="instock" style="color: red;float: right"> NOT IN STOCK </h6>
+                <br>
+                <hr>
+                <button id="add_to_cart" data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart hidden">Add to Cart</button>
+                {% else %}
+                <h6 id="instock" style="float: right">IN STOCK: {{product.quantity}}</h6>
+                <br>
+                <hr>
+                <button id="add_to_cart" data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+                {% endif %}
+                <a class="btn btn-outline-success" href="{% url 'product_detail' product.id %}">View</a>
+                <h4 style="display: inline-block; float: right"><strong>${{product.price|floatformat:2}}</strong></h4>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="vessel"></div>
+
+</div>
+
+{% endblock content %}
