@@ -97,27 +97,7 @@ DATABASES = {
             }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME':'DEMO_TEST',
-#         'USER':'postgres',
-#         'PASSWORD':'songqianchao',
-#         'HOST':'localhost',
-#         'PORT':'5432',
-#     }
-# }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME':'crm',
-#         'USER':'daojiatang',
-#         'PASSWORD':'songqianchao',
-#         'HOST':'database-1.cjzqufdwyflz.us-east-2.rds.amazonaws.com',
-#         'PORT':'5432',
-#     }
-# }
 
 
 # Password validation
@@ -190,16 +170,16 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 # not SSL but use TLS
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'daojiatang@outlook.com'
-EMAIL_HOST_PASSWORD = 'SONGqianchao@'
+EMAIL_HOST_USER = '******'
+EMAIL_HOST_PASSWORD = '******'
 
 
 
 #S3 BUCKETS CONFIG
 
-# AWS_ACCESS_KEY_ID = 'AKIA6OQQUIUZENNYZU6V'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'my-crm-bucket'
+# AWS_ACCESS_KEY_ID = '******'
+# AWS_SECRET_ACCESS_KEY = '******'
+# AWS_STORAGE_BUCKET_NAME = '******'
 # AWS_S3_FILE_OVERWRITE = False
 # AWS_DEFAULT_ACL = None
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -208,9 +188,9 @@ EMAIL_HOST_PASSWORD = 'SONGqianchao@'
 
 
 # #S3 BUCKETS CONFIG
-# AWS_ACCESS_KEY_ID = 'AKIAW2YKG6RCBHK5PMKR'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'daojiatang-crm--bucket'
+# AWS_ACCESS_KEY_ID = '*****'
+# AWS_SECRET_ACCESS_KEY = '*******'
+# AWS_STORAGE_BUCKET_NAME = '*****'
 
 # #
 # AWS_S3_FILE_OVERWRITE = False
